@@ -38,7 +38,7 @@ func queryRows(db *sql.DB) {
 	for rows.Next() {
 		rows.Scan(&name, &id, &rate)
 		log.Printf("name: %s id: %d, rate: %.2f\n", name, id, rate)
-		writeToRedis(name, id, rate)
+		//writeToRedis(name, id, rate)
 	}
 
 }
@@ -75,7 +75,7 @@ func writeToRedis(name string, id int, rate float64) error {
 			ID: id,
 		}
 	b, _ := json.Marshal(s)
-	_, err = redisConn.Do("HSET", hash_key, id, string(b))
+	_, err = redisConn.Do("HSET", fmt.Sprintf("%s:%d", hash_key, id%256), id, string(b))
 	if err != nil {
 		log.Println(err)
 		return err
