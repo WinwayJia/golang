@@ -89,16 +89,42 @@ func writeToRedis(name string, id int, rate float64) error {
 	return nil
 }
 
+func import2Polls(from, to *sql.DB) {
+	rows, err := from.Query("SELECT ACTOR_ID, FIRST_NAME||' '||LAST_NAME FROM ACTOR")
+	if err != nil {
+		fmt.Println(err)
+		return ;
+	}
+
+	var id uint64
+	var name string
+	sql := "INSERT INTO POLLS_USERINFO(USER_ID, USER_NAME) VALUES "
+	buff := bytes.NewBufferString(sql)
+	for rows.Next() {
+		rows.Scan(&id, &name)
+		buff.WriteString(fmt.Sprintf("(%d, '%s'),", id, name))
+	}
+	sql = buff.String()
+	sql = sql[:len(sql)-1] + ";"
+	fmt.Println(sql)
+	tx, _ := to.Begin()
+	to.Query(sql)
+	tx.Commit()
+}
+
 func main() {
 	db, err := sql.Open("postgres", "postgres://postgres:111111@127.0.0.1:5432/dvdrental")
-	//db, err := sql.Open("postgres", "user=postgres dbname=test sslmode=verify-full")
+	pollsDB, err := sql.Open("postgres", "user=postgres password=111111 dbname=test")
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	defer db.Close()
+	defer pollsDB.Close()
 
 	//insertRows(db)
 
-	queryRows(db)
+	//queryRows(db)
+
+	import2Polls(db, pollsDB)
 }

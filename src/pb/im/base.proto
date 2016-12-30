@@ -1,0 +1,6 @@
+package base;
+
+message ErrInfo {
+    required int64 Code = 1;
+    optional string Msg = 2;
+};

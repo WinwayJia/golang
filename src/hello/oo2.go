@@ -10,12 +10,12 @@ type Part struct {
 	Name string
 }
 
-func (p Part) UpperCase() {
+func (p *Part) UpperCase() {
 	fmt.Println("Uppercase")
 	p.Name = strings.ToUpper(p.Name)
 }
 
-func (p *Part) String() string {
+func (p Part) String() string {
 	return fmt.Sprintf("id: %d name: %s", p.Id, p.Name)
 }
 
@@ -35,7 +35,7 @@ type SpecialItem struct {
 }
 
 func main() {
-	var p = Part{1000, "json"}
+	var p = &Part{1000, "json"}
 	p.UpperCase()
 	fmt.Println(p)
 
