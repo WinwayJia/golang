@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdint.h>
 #include <iostream>
 #include <unordered_map>
 
@@ -10,12 +12,13 @@ struct St {
 
 int main() {
 
-    unordered_map<string, St> m = { {"json", {"0000", 10 }, }};
+    unordered_map<uint64_t, St> m = { {1, {"0000", 10 }, }};
 
-    m["json"].address = "11111";
+    m[1].address = "11111";
 
-    for (auto i : m) {
+    for (auto &i : m) {
         cout << i.second.address << "\t" << i.second.age << endl;
+        printf("%p\n%p\n%p\n", &i, &(i.first), &(i.second));
     }
 
     return 0;

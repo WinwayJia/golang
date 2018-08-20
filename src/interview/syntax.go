@@ -6,11 +6,12 @@ import (
 
 type People interface {
 	Speak(string) string
+	Say(string) string
 }
 
-type Stduent struct{}
+type Student struct{}
 
-func (stu *Stduent) Speak(think string) (talk string) {
+func (stu *Student) Speak(think string) (talk string) {
 	if think == "bitch" {
 		talk = "You are a good boy"
 	} else {
@@ -20,8 +21,14 @@ func (stu *Stduent) Speak(think string) (talk string) {
 	return
 }
 
+func (stu Student) Say(think string) (talk string) {
+	talk = "hello"
+	return
+}
+
 func main() {
-	var peo People = Stduent{}
+	var peo People = Student{}
 	think := "bitch"
-	fmt.Println(peo.Speak(think))
+	//fmt.Println(peo.Speak(think))
+	fmt.Println(peo.Say(think))
 }
