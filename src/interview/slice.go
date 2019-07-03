@@ -29,6 +29,32 @@ func array() {
 	fmt.Println(slice)
 }
 
+func nilSlice() {
+	// nil slice
+	var nil1 []int
+	var nil2 = *new([]int)
+	fmt.Println("nil slice: ", nil1 == nil, nil2 == nil)
+
+	// empty slice
+	e1 := make([]int, 0, 0)
+	var e2 = []int{}
+	fmt.Println("empty slice: ", e1 != nil, e2 != nil)
+}
+
+func sliceInit() {
+	s1 := []int{0, 1, 2, 3, 8: 100} // 索引号
+	fmt.Println(s1, len(s1), cap(s1))
+}
+
+func expandSlice(s []int) {
+	header := (*reflect.SliceHeader)(unsafe.Pointer(&s))
+	fmt.Println(header)
+	s = append(s, []int{1, 2, 3, 4, 5, 6, 7, 8}...)
+	header = (*reflect.SliceHeader)(unsafe.Pointer(&s))
+	fmt.Println(header)
+	fmt.Println(s)
+}
+
 func main() {
 	s := make([]int, 5)
 	s = append(s, 1, 2, 3)
@@ -36,4 +62,12 @@ func main() {
 
 	fmt.Println("\n\n")
 	array()
+
+	nilSlice()
+
+	sliceInit()
+
+	s1 := make([]int, 0, 1)
+	expandSlice(s1)
+	fmt.Println(s1)
 }
